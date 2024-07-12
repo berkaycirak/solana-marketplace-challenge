@@ -1,25 +1,21 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { PublicKey, publicKey } from "@metaplex-foundation/umi";
-import { fetchAssetsByOwner } from "@metaplex-foundation/mpl-core";
+import { PublicKey } from "@metaplex-foundation/umi";
+
 import { Mint } from "@metaplex-foundation/mpl-toolbox";
-import { createUmi } from "@metaplex-foundation/umi-bundle-defaults";
 import {
   Metadata,
   MasterEdition,
   Edition,
 } from "@metaplex-foundation/mpl-token-metadata";
-import { fetchAllDigitalAssetByOwner } from "@metaplex-foundation/mpl-token-metadata";
-import { useAnchorWallet, useWallet } from "@solana/wallet-adapter-react";
-import { clusterApiUrl } from "@solana/web3.js";
-import axios from "axios";
 import { fetchAssetsOfAddress } from "@/actions/getAssets";
 import { HeliusSearchAssetsResponse } from "@/types/helius-search-assets-response.";
 import Image from "next/image";
-import { cn } from "@/lib/utils";
-import { redditMono } from "@/app/fonts";
+import { useConnection, useWallet } from "@solana/wallet-adapter-react";
+
 import { Button } from "@/components/ui/button";
 import { listAsset } from "@/actions/listAsset";
+import { useProgramContext } from "@/providers/ProgramProvider";
 
 export type DigitalAsset = {
   publicKey: PublicKey;
@@ -31,19 +27,28 @@ export type DigitalAsset = {
 };
 
 const YourAssets = () => {
-  const { publicKey: connectedWalletPublicKey } = useWallet();
+  const { connection } = useConnection();
+  const program = useProgramContext();
+  const { publicKey: connectedWalletPublicKey, sendTransaction } = useWallet();
   const [assets, setAssets] = useState<HeliusSearchAssetsResponse>();
+
+  const handleList = async () => {
+    if (connectedWalletPublicKey && program) {
+      const tx = await listAsset(connectedWalletPublicKey.toBase58(), program);
+
+      const signature = await sendTransaction(tx, connection);
+      console.log(signature);
+    }
+  };
 
   useEffect(() => {
     if (connectedWalletPublicKey) {
-      listAsset(connectedWalletPublicKey.toBase58());
       const pk_string = connectedWalletPublicKey.toBase58();
       const fetchAssets = async () => {
         const addressAssets = await fetchAssetsOfAddress({
           address: pk_string,
         });
 
-        console.log(addressAssets);
         setAssets(addressAssets);
       };
 
@@ -77,7 +82,7 @@ const YourAssets = () => {
               width={300}
               className="rounded-lg"
             />
-            <Button>List</Button>
+            <Button onClick={handleList}>List</Button>
           </div>
         );
       })}
