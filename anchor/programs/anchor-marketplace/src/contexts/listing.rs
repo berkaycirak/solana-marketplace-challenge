@@ -15,7 +15,7 @@ pub struct List<'info> {
         seeds = [b"marketplace", marketplace.name.as_str().as_bytes()],
         bump = marketplace.bump,
     )]
-    marketplace: Account<'info, Marketplace>,
+    marketplace: Account<'info, Marketplace>,s
     maker_mint: InterfaceAccount<'info, Mint>,
     collection_mint: InterfaceAccount<'info, Mint>,
     #[account(
