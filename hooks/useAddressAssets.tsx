@@ -1,40 +1,53 @@
 import { createUmi } from "@metaplex-foundation/umi-bundle-defaults";
 import { publicKey } from "@metaplex-foundation/umi";
-import { fetchAssetsByOwner, mplCore } from "@metaplex-foundation/mpl-core";
+import {
+  fetchAllDigitalAssetByOwner,
+  mplTokenMetadata,
+} from "@metaplex-foundation/mpl-token-metadata";
+import { PublicKey } from "@metaplex-foundation/umi";
+import { Mint } from "@metaplex-foundation/mpl-toolbox";
+import {
+  Metadata,
+  MasterEdition,
+  Edition,
+} from "@metaplex-foundation/mpl-token-metadata";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { clusterApiUrl } from "@solana/web3.js";
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { NFTMetadata } from "@/types";
+import { fetchAssetsOfAddress } from "@/actions/getAssets";
+import { toast } from "sonner";
+
+export type DigitalAsset = {
+  publicKey: PublicKey;
+  mint: Mint;
+  metadata: Metadata;
+  edition?:
+    | ({ isOriginal: true } & MasterEdition)
+    | ({ isOriginal: false } & Edition);
+};
 
 const useAddressAssets = () => {
   // Umi connection
-  const umi = createUmi(clusterApiUrl("devnet")).use(mplCore());
+  const umi = createUmi(clusterApiUrl("devnet")).use(mplTokenMetadata());
   // connected wallet address
   const { publicKey: connectedAddress } = useWallet();
 
   const fetchAssets = async () => {
     if (connectedAddress) {
       // Fetch assets from on-chain
-      const assets = await fetchAssetsByOwner(
-        umi,
-        publicKey(publicKey(connectedAddress)),
-      );
-      // Iterate over assets to fetch off-chain data using uri in which metadata is uploaded and combine it with on-chain data.
-      const assetInfoPromises = assets.map(async (asset) => {
-        const metadata = (await axios.get<NFTMetadata>(asset.uri)).data;
+      try {
+        const assets = await fetchAssetsOfAddress({
+          address: connectedAddress.toBase58(),
+        });
 
-        return {
-          ...metadata,
-          owner: asset.owner,
-          publicKey: asset.publicKey,
-        };
-      });
-
-      const assetsInfo = await Promise.all(assetInfoPromises);
-
-      return assetsInfo;
+        return assets;
+      } catch (error) {
+        console.log(error);
+        toast.error("There is an error while fetching your NFTs");
+      }
     }
   };
 

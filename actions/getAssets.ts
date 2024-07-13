@@ -1,5 +1,5 @@
 import { available_chains } from "@/available_chains";
-import { HeliusSearchAssetsResponse } from "@/types/helius-search-assets-response.";
+import { HeliusSearchAssetsResponse } from "@/types/helius-search-asset-response";
 import axios from "axios";
 
 export const fetchAssetsOfAddress = async ({
@@ -15,7 +15,7 @@ export const fetchAssetsOfAddress = async ({
       page: 1,
       limit: 100,
       ownerAddress: address,
-      tokenType: "nonFungible",
+      interface: "V1_NFT",
     },
   });
 
