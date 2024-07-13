@@ -14,8 +14,7 @@ import Image from "next/image";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 
 import { Button } from "@/components/ui/button";
-import { listAsset } from "@/actions/listAsset";
-import { useProgramContext } from "@/providers/ProgramProvider";
+import useListMethod from "./useListMethod";
 
 export type DigitalAsset = {
   publicKey: PublicKey;
@@ -28,18 +27,10 @@ export type DigitalAsset = {
 
 const YourAssets = () => {
   const { connection } = useConnection();
-  const program = useProgramContext();
+
   const { publicKey: connectedWalletPublicKey, sendTransaction } = useWallet();
   const [assets, setAssets] = useState<HeliusSearchAssetsResponse>();
-
-  const handleList = async () => {
-    if (connectedWalletPublicKey && program) {
-      const tx = await listAsset(connectedWalletPublicKey.toBase58(), program);
-
-      const signature = await sendTransaction(tx, connection);
-      console.log(signature);
-    }
-  };
+  const { listAsset } = useListMethod();
 
   useEffect(() => {
     if (connectedWalletPublicKey) {
@@ -48,7 +39,7 @@ const YourAssets = () => {
         const addressAssets = await fetchAssetsOfAddress({
           address: pk_string,
         });
-
+        console.log(addressAssets);
         setAssets(addressAssets);
       };
 
@@ -82,7 +73,7 @@ const YourAssets = () => {
               width={300}
               className="rounded-lg"
             />
-            <Button onClick={handleList}>List</Button>
+            <Button onClick={listAsset}>List</Button>
           </div>
         );
       })}
