@@ -1,7 +1,7 @@
 import { Program } from "@coral-xyz/anchor";
 import { AnchorMarketplace, IDL } from "@/idl/anchor_marketplace";
 import { clusterApiUrl, Connection } from "@solana/web3.js";
-import { program_pk } from "@/constants";
+import { program_pk } from "@/anchor-marketplace/constants";
 
 const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
 

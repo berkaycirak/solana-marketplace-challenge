@@ -1,5 +1,5 @@
-import { listAssetMethod } from "@/actions/listAssetMethod";
-import { program_pk } from "@/constants";
+import { listAsset } from "@/anchor-marketplace/program-methods/list";
+import { PROGRAM_ID } from "@/anchor-marketplace/constants";
 import { IDL } from "@/idl/anchor_marketplace";
 import { AnchorProvider, Program } from "@coral-xyz/anchor";
 import {
@@ -22,14 +22,20 @@ const useListMethod = () => {
         anchorWallet,
         AnchorProvider.defaultOptions(),
       );
-      return new Program(IDL, program_pk, provider);
+      return new Program(IDL, PROGRAM_ID, provider);
     }
   }, [connection, anchorWallet]);
 
-  const listAsset = async () => {
+  const list = async () => {
     if (program && publicKey) {
       try {
-        const tx = await listAssetMethod(publicKey, program);
+        const tx = await listAsset({
+          program,
+          signer: publicKey,
+          collectionMint,
+          makerMint,
+          price: 5,
+        });
         console.log(tx);
       } catch (error) {
         console.log(error);

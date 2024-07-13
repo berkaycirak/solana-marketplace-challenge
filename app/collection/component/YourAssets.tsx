@@ -8,13 +8,11 @@ import {
   MasterEdition,
   Edition,
 } from "@metaplex-foundation/mpl-token-metadata";
-import { fetchAssetsOfAddress } from "@/actions/getAssets";
-import { HeliusSearchAssetsResponse } from "@/types/helius-search-assets-response.";
+
 import Image from "next/image";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
-
 import { Button } from "@/components/ui/button";
-import useListMethod from "./useListMethod";
+import useAddressAssets from "@/hooks/useAddressAssets";
 
 export type DigitalAsset = {
   publicKey: PublicKey;
@@ -27,56 +25,46 @@ export type DigitalAsset = {
 
 const YourAssets = () => {
   const { connection } = useConnection();
-
   const { publicKey: connectedWalletPublicKey, sendTransaction } = useWallet();
-  const [assets, setAssets] = useState<HeliusSearchAssetsResponse>();
-  const { listAsset } = useListMethod();
 
-  useEffect(() => {
-    if (connectedWalletPublicKey) {
-      const pk_string = connectedWalletPublicKey.toBase58();
-      const fetchAssets = async () => {
-        const addressAssets = await fetchAssetsOfAddress({
-          address: pk_string,
-        });
-        console.log(addressAssets);
-        setAssets(addressAssets);
-      };
-
-      fetchAssets();
-    }
-  }, [connectedWalletPublicKey]);
+  const { assetInfos, status } = useAddressAssets();
 
   return (
     <div className="p-12">
-      {assets?.map((asset) => {
-        const name = asset.content.metadata.name;
-        const attributes = asset.content.metadata.attributes;
-        const image = asset.content.links.image;
-        const description = asset.content.metadata.description;
-        return (
-          <div key={asset.id}>
-            <div>
-              <h5 className="font-bold">{asset.content.metadata.name}</h5>
-              {attributes.map((attribute) => (
-                <ul key={attribute.value} className="flex items-center gap-2">
-                  <li className="font-bold">{attribute.trait_type}</li>
-                  <li>{attribute.value}</li>
-                </ul>
-              ))}
-            </div>
+      {assetInfos?.map(
+        ({
+          attributes,
+          description,
+          image,
+          name,
+          owner,
+          publicKey,
+          symbol,
+        }) => {
+          return (
+            <div key={publicKey}>
+              <div>
+                <h5 className="font-bold">{name}</h5>
+                {attributes.map((attribute) => (
+                  <ul key={attribute.value} className="flex items-center gap-2">
+                    <li className="font-bold">{attribute.trait_type}</li>
+                    <li>{attribute.value}</li>
+                  </ul>
+                ))}
+              </div>
 
-            <Image
-              src={image}
-              alt={name}
-              height={300}
-              width={300}
-              className="rounded-lg"
-            />
-            <Button onClick={listAsset}>List</Button>
-          </div>
-        );
-      })}
+              <Image
+                src={image}
+                alt={name}
+                height={300}
+                width={300}
+                className="rounded-lg"
+              />
+              <Button>List</Button>
+            </div>
+          );
+        },
+      )}
     </div>
   );
 };
