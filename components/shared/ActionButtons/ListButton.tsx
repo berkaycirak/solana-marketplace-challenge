@@ -44,7 +44,11 @@ const ListButton = ({ collectionAddress, nftMintAddress }: ListButtonProps) => {
     }
   };
 
-  return <Button onClick={() => handleList(10)}>List</Button>;
+  return (
+    <Button className="w-full" onClick={() => handleList(10)}>
+      List
+    </Button>
+  );
 };
 
 export default ListButton;

@@ -43,7 +43,11 @@ const DelistButton = ({ owner, ownerMint }: DelistButtonProps) => {
       }
     }
   };
-  return <Button onClick={handleDelist}>Cancel List</Button>;
+  return (
+    <Button className="w-full" onClick={handleDelist}>
+      Cancel List
+    </Button>
+  );
 };
 
 export default DelistButton;

@@ -19,6 +19,8 @@ import { nft_list } from "@/anchor-marketplace/program-methods/list";
 import useProgram from "@/hooks/useProgram";
 import { PublicKey as PK } from "@solana/web3.js";
 import ListButton from "@/components/shared/ActionButtons/ListButton";
+import NFT from "@/components/shared/NFT";
+import PurchaseButton from "@/components/shared/ActionButtons/PurchaseButton";
 
 export type DigitalAsset = {
   publicKey: PublicKey;
@@ -52,16 +54,18 @@ const YourAssets = () => {
               <p>{description}</p>
             </div>
 
-            <Image
-              src={image}
-              alt={name}
-              height={300}
-              width={300}
-              className="rounded-lg"
-            />
-            <ListButton
-              collectionAddress={collection_address}
-              nftMintAddress={nft_mint_address}
+            <NFT
+              description={description}
+              image={image}
+              mintAddress={nft_mint_address}
+              name={name}
+              price={0}
+              button={
+                <ListButton
+                  nftMintAddress={nft_mint_address}
+                  collectionAddress={collection_address}
+                />
+              }
             />
           </div>
         );

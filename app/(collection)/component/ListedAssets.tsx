@@ -16,7 +16,6 @@ const ListedAssets = () => {
   return (
     <div>
       {listedAssets?.map((asset) => {
-        console.log(asset);
         const isOwner = checkOwnership(asset.owner, publicKey?.toBase58());
         // already listed ==> delist
 
