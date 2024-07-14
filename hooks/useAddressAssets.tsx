@@ -32,16 +32,25 @@ export type DigitalAsset = {
 const useAddressAssets = () => {
   // connected wallet address
   const { publicKey: connectedAddress } = useWallet();
+  const umi = createUmi(clusterApiUrl("devnet"));
 
   const fetchAssets = async () => {
     if (connectedAddress) {
       // Fetch assets from on-chain
+      const x = await fetchAllDigitalAssetByOwner(
+        umi,
+        publicKey("6LHit9vc5XxG4a8iFzKsAHBNf1HTEM1sRLPht6YbdoqP"),
+      );
+      console.log(x);
       try {
         const assets = await fetchAssetsOfAddress({
           address: connectedAddress.toBase58(),
         });
-
-        return assets.filter((asset) => asset.grouping.length > 0);
+        console.log(assets);
+        const filteredAssets = assets.filter(
+          (asset) => asset.grouping.length > 0,
+        );
+        return filteredAssets;
       } catch (error) {
         console.log(error);
         toast.error("There is an error while fetching your NFTs");

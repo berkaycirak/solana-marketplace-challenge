@@ -33,6 +33,7 @@ export type DigitalAsset = {
 
 const OwnedRabidos = () => {
   const { assetInfos, status } = useAddressAssets();
+  console.log(assetInfos);
   const { connection } = useConnection();
   const { publicKey: signerPublicKey, sendTransaction } = useWallet();
   const program = useProgram();

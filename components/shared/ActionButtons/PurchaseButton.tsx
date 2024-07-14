@@ -1,9 +1,10 @@
+import { signerWallet } from "@/anchor-marketplace/constants";
 import { nft_list } from "@/anchor-marketplace/program-methods/list";
 import { purchase_nft } from "@/anchor-marketplace/program-methods/purchase";
 import { Button } from "@/components/ui/button";
 import useProgram from "@/hooks/useProgram";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
-import { PublicKey } from "@solana/web3.js";
+import { Keypair, PublicKey } from "@solana/web3.js";
 import React from "react";
 import { toast } from "sonner";
 
@@ -20,7 +21,7 @@ const PurchaseButton = ({
   const program = useProgram();
   const { publicKey: signerPublicKey, sendTransaction } = useWallet();
   // List click logic
-  const handleBuy = async (e: MouseEvent) => {
+  const handleBuy = async (e: any) => {
     e.stopPropagation();
     if (program && signerPublicKey) {
       // Take the promise then pass it to toaster for user feedback on UI
@@ -36,7 +37,8 @@ const PurchaseButton = ({
           success: async (data) => {
             console.log(data);
             if (data) {
-              await sendTransaction(data, connection);
+              // await sendTransaction(data, connection);
+
               return `${!data ? "An error occured" : "Successful, you have bought your NFT"}`;
             }
           },
@@ -49,7 +51,7 @@ const PurchaseButton = ({
   };
 
   return (
-    <Button className="w-full" onClick={handleBuy}>
+    <Button className="w-full" onClick={(e) => handleBuy(e)}>
       Buy
     </Button>
   );

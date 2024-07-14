@@ -20,6 +20,8 @@ const useListedAssets = () => {
           const owner = listing.account.maker.toBase58();
           const data = await getAsset(mintAddress);
 
+          console.log(listing.publicKey.toBase58());
+
           return {
             price: Number(listing.account.price) / LAMPORTS_PER_SOL,
             mintAddress,

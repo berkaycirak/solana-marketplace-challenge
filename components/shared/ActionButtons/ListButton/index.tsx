@@ -14,9 +14,8 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
-import React, { useState } from "react";
+import React, { ElementRef, useRef, useState } from "react";
 import { toast } from "sonner";
-import ListPriceInput from "./ListPriceInput";
 import { Minus, Plus } from "lucide-react";
 
 interface ListButtonProps {
@@ -28,8 +27,6 @@ const ListButton = ({ collectionAddress, nftMintAddress }: ListButtonProps) => {
   const { connection } = useConnection();
   const program = useProgram();
   const { publicKey: signerPublicKey, sendTransaction } = useWallet();
-  const [listPrice, setListPrice] = useState<number>(0);
-
   // List click logic
   const handleList = async (price: number) => {
     if (program && signerPublicKey) {
@@ -39,7 +36,7 @@ const ListButton = ({ collectionAddress, nftMintAddress }: ListButtonProps) => {
         signer: signerPublicKey,
         collectionMint: new PublicKey(collectionAddress),
         makerMint: new PublicKey(nftMintAddress),
-        price: 1,
+        price,
       });
       try {
         toast.promise(listNftPromise, {
@@ -59,62 +56,59 @@ const ListButton = ({ collectionAddress, nftMintAddress }: ListButtonProps) => {
     }
   };
 
-  const [goal, setGoal] = React.useState(350);
-
-  function onClick(adjustment: number) {
-    setGoal(Math.max(200, Math.min(400, goal + adjustment)));
-  }
+  const listPriceRef = useRef<ElementRef<"input">>(null);
+  const [listPrice, setListPrice] = useState<number>(0);
 
   return (
     <Drawer>
       <DrawerTrigger asChild>
-        <Button variant="outline">Open Drawer</Button>
+        <Button className="w-full">List</Button>
       </DrawerTrigger>
       <DrawerContent>
-        <div className="mx-auto w-full max-w-sm">
-          <DrawerHeader>
-            <DrawerTitle>Move Goal</DrawerTitle>
-            <DrawerDescription>Set your daily activity goal.</DrawerDescription>
-          </DrawerHeader>
-          <div className="p-4 pb-0">
+        <DrawerHeader>
+          <DrawerTitle>List your NFT</DrawerTitle>
+          <DrawerDescription>
+            You can list your NFT by paying and confirming from your adapted
+            wallet.
             <div className="flex items-center justify-center space-x-2">
               <Button
                 variant="outline"
                 size="icon"
                 className="h-8 w-8 shrink-0 rounded-full"
-                onClick={() => onClick(-10)}
-                disabled={goal <= 200}
+                onClick={() => handleList(listPrice)}
+                disabled={listPrice <= 0}
               >
                 <Minus className="h-4 w-4" />
                 <span className="sr-only">Decrease</span>
               </Button>
               <div className="flex-1 text-center">
                 <div className="text-7xl font-bold tracking-tighter">
-                  {goal}
+                  <span className="" ref={listPriceRef}>
+                    {listPrice}
+                  </span>
                 </div>
-                <div className="text-[0.70rem] uppercase text-muted-foreground">
-                  Calories/day
-                </div>
+                <div className="text-[0.70rem] uppercase text-muted-foreground"></div>
               </div>
               <Button
                 variant="outline"
                 size="icon"
                 className="h-8 w-8 shrink-0 rounded-full"
-                onClick={() => onClick(10)}
-                disabled={goal >= 400}
+                onClick={() => setListPrice((prev) => prev + 1)}
               >
                 <Plus className="h-4 w-4" />
                 <span className="sr-only">Increase</span>
               </Button>
             </div>
-          </div>
-          <DrawerFooter>
-            <Button>Submit</Button>
-            <DrawerClose asChild>
-              <Button variant="outline">Cancel</Button>
-            </DrawerClose>
-          </DrawerFooter>
-        </div>
+          </DrawerDescription>
+        </DrawerHeader>
+        <DrawerFooter>
+          <Button>List</Button>
+          <DrawerClose>
+            <Button className="w-full" variant="outline">
+              Cancel
+            </Button>
+          </DrawerClose>
+        </DrawerFooter>
       </DrawerContent>
     </Drawer>
   );

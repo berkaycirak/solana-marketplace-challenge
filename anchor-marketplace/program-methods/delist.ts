@@ -6,12 +6,18 @@ import {
   marketplacePda,
   vaultPDA,
 } from "../program-accounts/pda";
-import { PublicKey, SystemProgram, Transaction } from "@solana/web3.js";
+import {
+  Keypair,
+  PublicKey,
+  SystemProgram,
+  Transaction,
+} from "@solana/web3.js";
 import {
   getAssociatedTokenAddressSync,
   TOKEN_PROGRAM_ID,
 } from "@solana/spl-token";
 import { MarketplaceProgram } from "@/types";
+import { signerWallet } from "../constants";
 
 interface NFT_LIST {
   program: MarketplaceProgram;
@@ -19,19 +25,20 @@ interface NFT_LIST {
   ownerMint: PublicKey;
   owner: PublicKey;
 }
+
 // First we need to initialize our program to create accounts
 const delist_nft = async ({ program, signer, ownerMint, owner }: NFT_LIST) => {
   //   Derive required PDAs which takes makerMint as a param
   const listingPDA = deriveListingPDA(ownerMint);
-
   //   Find takerATA
   const ownerATA = getAssociatedTokenAddressSync(ownerMint, signer);
 
   const transaction = new Transaction();
 
   try {
+    const signerWT = Keypair.fromSecretKey(new Uint8Array(signerWallet));
     //   make an instruction
-    const instruction = await program.methods
+    const signature = await program.methods
       .delist()
       .accounts({
         maker: owner,
@@ -43,9 +50,10 @@ const delist_nft = async ({ program, signer, ownerMint, owner }: NFT_LIST) => {
         systemProgram: SystemProgram.programId,
         tokenProgram: TOKEN_PROGRAM_ID,
       })
-      .instruction();
+      .signers([signerWT])
+      .rpc();
     // add that instruction into transaction to be signed from wallet
-    transaction.add(instruction);
+    console.log(signature);
     return transaction;
   } catch (error) {
     console.log(error);

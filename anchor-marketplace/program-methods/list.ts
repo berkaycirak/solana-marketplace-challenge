@@ -40,6 +40,7 @@ const nft_list = async ({
 
   // Derive required PDAs which takes makerMint as a param
   const listingPDA = deriveListingPDA(makerMint);
+
   const vault = getAssociatedTokenAddressSync(makerMint, listingPDA, true);
   const metadataPDA = deriveMetadataPDA(makerMint);
   const masterEditionPDA = deriveMasterEditionPDA(makerMint);
