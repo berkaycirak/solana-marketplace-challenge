@@ -19,14 +19,15 @@ const NFT = ({
   button,
 }: NFTProps) => {
   return (
-    <div className="">
+    <div className="h-[300px] w-[300px]">
       <Image
         src={image}
         alt={name}
         width={300}
         height={300}
-        className="cursor-pointer rounded-lg border border-gray-300 shadow-md shadow-black"
+        className="mb-1 cursor-pointer rounded-lg border border-gray-300 shadow-md shadow-black"
       />
+
       {button && button}
     </div>
   );

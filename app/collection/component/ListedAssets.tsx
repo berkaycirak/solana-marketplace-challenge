@@ -7,6 +7,7 @@ import { useWallet } from "@solana/wallet-adapter-react";
 import ListButton from "@/components/shared/ActionButtons/ListButton";
 import { checkOwnership } from "@/utils/checkOwnership";
 import DelistButton from "@/components/shared/ActionButtons/DelistButton";
+import PurchaseButton from "@/components/shared/ActionButtons/PurchaseButton";
 
 const ListedAssets = () => {
   const { listedAssets, status } = useListedAssets();
@@ -15,7 +16,9 @@ const ListedAssets = () => {
   return (
     <div>
       {listedAssets?.map((asset) => {
+        console.log(asset);
         const isOwner = checkOwnership(asset.owner, publicKey?.toBase58());
+        // already listed ==> delist
 
         return (
           <NFT
@@ -26,7 +29,10 @@ const ListedAssets = () => {
                   ownerMint={asset.mintAddress}
                 />
               ) : (
-                <ListButton />
+                <PurchaseButton
+                  sellerMintAddress={asset.mintAddress}
+                  sellerWalletAddress={asset.owner}
+                />
               )
             }
             key={asset.mintAddress}

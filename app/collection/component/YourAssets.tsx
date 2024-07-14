@@ -18,6 +18,7 @@ import { toast } from "sonner";
 import { nft_list } from "@/anchor-marketplace/program-methods/list";
 import useProgram from "@/hooks/useProgram";
 import { PublicKey as PK } from "@solana/web3.js";
+import ListButton from "@/components/shared/ActionButtons/ListButton";
 
 export type DigitalAsset = {
   publicKey: PublicKey;
@@ -34,46 +35,13 @@ const YourAssets = () => {
   const { publicKey: signerPublicKey, sendTransaction } = useWallet();
   const program = useProgram();
 
-  // List click logic
-  const handleList = async (
-    nftMintAddress: string,
-    collectionAddress: string,
-    price: number,
-  ) => {
-    if (program && signerPublicKey) {
-      // Take the promise then pass it to toaster for user feedback on UI
-      const listNftPromise = nft_list({
-        program,
-        signer: signerPublicKey,
-        collectionMint: new PK(collectionAddress),
-        makerMint: new PK(nftMintAddress),
-        price,
-      });
-      try {
-        toast.promise(listNftPromise, {
-          loading: "NFT is listing...",
-          success: async (data) => {
-            console.log(data);
-            if (data) {
-              await sendTransaction(data, connection);
-              return `${!data ? "An error occured" : "Successful, you have listed your NFT"}`;
-            }
-          },
-          error: "An error occured!",
-        });
-      } catch (error) {
-        console.log(error);
-      }
-    }
-  };
-
   return (
     <div className="p-12">
       {assetInfos?.map((asset) => {
         const nft_mint_address = asset.id;
         // not sure if the grouping same with collection
         const collection_address = asset.grouping[0].group_value;
-        console.log(collection_address);
+
         const name = asset.content.metadata.name;
         const image = asset.content.links.image;
         const description = asset.content.metadata.description;
@@ -91,13 +59,10 @@ const YourAssets = () => {
               width={300}
               className="rounded-lg"
             />
-            <Button
-              onClick={() =>
-                handleList(nft_mint_address, collection_address, 10)
-              }
-            >
-              List
-            </Button>
+            <ListButton
+              collectionAddress={collection_address}
+              nftMintAddress={nft_mint_address}
+            />
           </div>
         );
       })}
