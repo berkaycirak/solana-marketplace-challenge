@@ -1,23 +1,23 @@
 import { available_chains } from "@/available_chains";
-import { HeliusSearchAssetsResponse } from "@/types/helius-search-asset-response";
+import { GetAssetResponse } from "@/types/get-asset-response";
 import axios from "axios";
 
-export const fetchAssetsOfAddress = async ({
-  address,
-}: {
-  address: string;
-}) => {
+// This method is the fastest way to lookup multiple NFTs (including metadata) on Solana.
+export const getAsset = async (id: string) => {
   const tokenAssets = await axios.post(available_chains.devnet.heliusUrl, {
     jsonrpc: "2.0",
     id: "",
-    method: "searchAssets",
+    method: "getAsset",
     params: {
-      page: 1,
-      limit: 100,
-      ownerAddress: address,
-      interface: "V1_NFT",
+      id,
+      options: {
+        showUnverifiedCollections: true,
+        showCollectionMetadata: true,
+        showFungible: false,
+        showInscription: false,
+      },
     },
   });
 
-  return tokenAssets.data.result.items as HeliusSearchAssetsResponse;
+  return tokenAssets.data.result as GetAssetResponse;
 };

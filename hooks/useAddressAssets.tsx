@@ -11,13 +11,13 @@ import {
   MasterEdition,
   Edition,
 } from "@metaplex-foundation/mpl-token-metadata";
-import { useWallet } from "@solana/wallet-adapter-react";
+import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { clusterApiUrl } from "@solana/web3.js";
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { NFTMetadata } from "@/types";
-import { fetchAssetsOfAddress } from "@/actions/getAssets";
+import { fetchAssetsOfAddress } from "@/actions/fetchAssetsOfAddress";
 import { toast } from "sonner";
 
 export type DigitalAsset = {
@@ -30,8 +30,6 @@ export type DigitalAsset = {
 };
 
 const useAddressAssets = () => {
-  // Umi connection
-  const umi = createUmi(clusterApiUrl("devnet")).use(mplTokenMetadata());
   // connected wallet address
   const { publicKey: connectedAddress } = useWallet();
 
@@ -43,7 +41,7 @@ const useAddressAssets = () => {
           address: connectedAddress.toBase58(),
         });
 
-        return assets;
+        return assets.filter((asset) => asset.grouping.length > 0);
       } catch (error) {
         console.log(error);
         toast.error("There is an error while fetching your NFTs");
@@ -54,6 +52,7 @@ const useAddressAssets = () => {
   const { data, status } = useQuery({
     queryFn: fetchAssets,
     queryKey: [`assets_${connectedAddress}`],
+    enabled: !!connectedAddress,
   });
 
   return { assetInfos: data, status };
