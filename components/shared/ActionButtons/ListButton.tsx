@@ -84,7 +84,7 @@ const ListButton = ({ collectionAddress, nftMintAddress }: ListButtonProps) => {
               <div className="flex-1 text-center">
                 <div className="text-7xl font-bold tracking-tighter">
                   <span className="" ref={listPriceRef}>
-                    0
+                    {listPrice}
                   </span>
                 </div>
                 <div className="text-[0.70rem] uppercase text-muted-foreground"></div>

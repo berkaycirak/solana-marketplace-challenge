@@ -52,6 +52,7 @@ const useAddressAssets = () => {
   const { data, status } = useQuery({
     queryFn: fetchAssets,
     queryKey: [`assets_${connectedAddress}`],
+    refetchInterval: 20 * 60 * 1000, //20sec
     enabled: !!connectedAddress,
   });
 

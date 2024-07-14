@@ -31,17 +31,18 @@ export type DigitalAsset = {
     | ({ isOriginal: false } & Edition);
 };
 
-const YourAssets = () => {
+const OwnedRabidos = () => {
   const { assetInfos, status } = useAddressAssets();
   const { connection } = useConnection();
   const { publicKey: signerPublicKey, sendTransaction } = useWallet();
   const program = useProgram();
 
   return (
-    <div className="p-12">
+    <div className="flex flex-wrap gap-6 p-12">
+      {assetInfos?.length === 0 && "There is no NFT Yet!"}
       {assetInfos?.map((asset) => {
         return (
-          <div key={asset.id}>
+          <div key={asset.id} className="flex flex-wrap">
             <NFT
               mintAddress={asset.id}
               description={asset.content.metadata.description}
@@ -62,4 +63,4 @@ const YourAssets = () => {
   );
 };
 
-export default YourAssets;
+export default OwnedRabidos;

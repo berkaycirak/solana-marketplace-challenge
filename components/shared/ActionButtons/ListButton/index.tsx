@@ -39,7 +39,7 @@ const ListButton = ({ collectionAddress, nftMintAddress }: ListButtonProps) => {
         signer: signerPublicKey,
         collectionMint: new PublicKey(collectionAddress),
         makerMint: new PublicKey(nftMintAddress),
-        price,
+        price: 1,
       });
       try {
         toast.promise(listNftPromise, {

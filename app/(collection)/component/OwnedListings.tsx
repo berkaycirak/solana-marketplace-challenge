@@ -8,14 +8,15 @@ import { checkOwnership } from "@/utils/checkOwnership";
 import DelistButton from "@/components/shared/ActionButtons/DelistButton";
 import PurchaseButton from "@/components/shared/ActionButtons/PurchaseButton";
 
-const ListedAssets = () => {
-  const { othersListings, status } = useListedAssets();
+const OwnedListings = () => {
+  const { connectedAccountListings, status } = useListedAssets();
+  console.log(connectedAccountListings);
 
   const { publicKey } = useWallet();
 
   return (
     <div className="flex flex-wrap gap-6">
-      {othersListings?.map((asset) => {
+      {connectedAccountListings?.map((asset) => {
         const isOwner = checkOwnership(asset.owner, publicKey?.toBase58());
 
         // already listed ==> delist
@@ -44,4 +45,4 @@ const ListedAssets = () => {
   );
 };
 
-export default ListedAssets;
+export default OwnedListings;

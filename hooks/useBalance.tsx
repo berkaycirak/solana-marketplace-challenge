@@ -20,6 +20,7 @@ const useBalance = () => {
   const { data, error, status } = useQuery({
     queryKey: ["wallet_balance_" + publicKey?.toBase58()],
     queryFn: fetchBalance,
+    refetchInterval: 10 * 60 * 1000, //20sec
   });
 
   return { balance: data, errorMessage: error?.message, status };
