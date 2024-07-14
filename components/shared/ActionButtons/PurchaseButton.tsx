@@ -20,7 +20,7 @@ const PurchaseButton = ({
   const program = useProgram();
   const { publicKey: signerPublicKey, sendTransaction } = useWallet();
   // List click logic
-  const handleBuy = async (e: MouseEvent) => {
+  const handleBuy = async (e: any) => {
     e.stopPropagation();
     if (program && signerPublicKey) {
       // Take the promise then pass it to toaster for user feedback on UI
