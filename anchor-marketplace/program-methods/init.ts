@@ -8,12 +8,13 @@ import {
 } from "../program-accounts/pda";
 import { PublicKey, SystemProgram, Transaction } from "@solana/web3.js";
 import { TOKEN_PROGRAM_ID } from "@solana/spl-token";
+import { MarketplaceProgram } from "@/types";
 
 const predeterminedFee = 0.00001;
 
 // First we need to initialize our program to create accounts
 const initializeProgram = async (
-  program: Program<AnchorMarketplace>,
+  program: MarketplaceProgram,
   admin: PublicKey,
 ) => {
   const transaction = new Transaction();

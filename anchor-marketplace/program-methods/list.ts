@@ -6,51 +6,56 @@ import {
   deriveMetadataPDA,
   deriveMasterEditionPDA,
   marketplacePda,
-  vaultPDA,
 } from "../program-accounts/pda";
-import { PublicKey, SystemProgram, Transaction } from "@solana/web3.js";
+import {
+  LAMPORTS_PER_SOL,
+  PublicKey,
+  SystemProgram,
+  Transaction,
+} from "@solana/web3.js";
 import {
   ASSOCIATED_TOKEN_PROGRAM_ID,
   getAssociatedTokenAddressSync,
   TOKEN_PROGRAM_ID,
 } from "@solana/spl-token";
-import { program } from "@coral-xyz/anchor/dist/cjs/native/system";
+import { MarketplaceProgram } from "@/types";
 
-interface ListAsset {
-  program: Program<AnchorMarketplace>;
+interface NFT_LIST {
+  program: MarketplaceProgram;
   signer: PublicKey;
   makerMint: PublicKey;
   collectionMint: PublicKey;
   price: number;
 }
 // First we need to initialize our program to create accounts
-const listAsset = async ({
+const nft_list = async ({
   program,
   signer,
   makerMint,
   collectionMint,
   price,
-}: ListAsset) => {
+}: NFT_LIST) => {
   // Find maker ATA account
   const makerATA = getAssociatedTokenAddressSync(makerMint, signer);
-  //   Derive required PDAs which takes makerMint as a param
+
+  // Derive required PDAs which takes makerMint as a param
   const listingPDA = deriveListingPDA(makerMint);
+  const vault = getAssociatedTokenAddressSync(makerMint, listingPDA, true);
   const metadataPDA = deriveMetadataPDA(makerMint);
   const masterEditionPDA = deriveMasterEditionPDA(makerMint);
-
   const transaction = new Transaction();
 
   try {
     //   make an instruction
     const instruction = await program.methods
-      .list(BN(price))
+      .list(new BN(price * LAMPORTS_PER_SOL))
       .accounts({
         maker: signer,
         marketplace: marketplacePda,
         makerMint,
-        collectionMint,
+        collectionMint: collectionMint,
         makerAta: makerATA,
-        vault: vaultPDA,
+        vault: vault,
         listing: listingPDA,
         metadata: metadataPDA,
         masterEdition: masterEditionPDA,
@@ -68,4 +73,4 @@ const listAsset = async ({
   }
 };
 
-export { listAsset };
+export { nft_list };
