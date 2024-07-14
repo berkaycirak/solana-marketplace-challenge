@@ -8,7 +8,7 @@ import OwnedRabidos from "./component/OwnedRabidos";
 
 const CollectionPage = () => {
   return (
-    <section className="container mx-auto p-12">
+    <section className="container mx-auto p-2 md:p-12">
       {/* Banner For MarketHall  */}
       <div></div>
       {/* Tabs */}

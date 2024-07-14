@@ -15,7 +15,7 @@ const OwnedListings = () => {
   const { publicKey } = useWallet();
 
   return (
-    <div className="flex flex-wrap gap-6">
+    <div className="flex flex-wrap content-start gap-2 sm:gap-6">
       {connectedAccountListings?.map((asset) => {
         const isOwner = checkOwnership(asset.owner, publicKey?.toBase58());
 

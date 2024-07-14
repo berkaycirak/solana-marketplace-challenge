@@ -38,7 +38,7 @@ const OwnedRabidos = () => {
   const program = useProgram();
 
   return (
-    <div className="flex flex-wrap gap-6 p-12">
+    <div className="flex flex-wrap content-start gap-2 sm:gap-6">
       {assetInfos?.length === 0 && "There is no NFT Yet!"}
       {assetInfos?.map((asset) => {
         return (

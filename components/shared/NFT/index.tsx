@@ -30,7 +30,7 @@ const NFT = ({
   return (
     <Dialog>
       <DialogTrigger>
-        <div className="h-[300px] w-[300px]">
+        <div className="h-[200px] w-[200px] sm:h-[300px] sm:w-[300px]">
           <Image
             src={image}
             alt={name}
@@ -49,15 +49,15 @@ const NFT = ({
           {button && button}
         </div>
       </DialogTrigger>
-      <DialogContent>
-        <div className="flex w-[950px] items-center justify-center">
-          <div className="flex py-4">
+      <DialogContent className="w-[95%] rounded-lg md:w-[700px] xl:w-[950px]">
+        <div className="flex items-center justify-center">
+          <div className="flex flex-col items-center py-4 md:flex-row">
             <Image
               src={image}
               alt={name}
               width={350}
               height={350}
-              className="mb-1 cursor-pointer rounded-lg border border-gray-300 shadow-md shadow-black"
+              className="mb-6 h-[225px] w-[225px] cursor-pointer rounded-lg border border-gray-300 shadow-md shadow-black md:mb-1 md:h-[350px] md:w-[350px]"
             />
             <div className="flex flex-col px-6">
               <h5 className={cn("mb-4 font-bold", redditMono.className)}>
