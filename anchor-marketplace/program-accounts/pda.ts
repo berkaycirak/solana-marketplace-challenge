@@ -1,17 +1,16 @@
 import { PublicKey } from "@solana/web3.js";
 import { METADATA_ID, PROGRAM_ID, PROGRAM_NAME } from "../constants";
-import { utf8 } from "@coral-xyz/anchor/dist/cjs/utils/bytes";
 
 // Marketplace PDA
 const [marketplacePda] = PublicKey.findProgramAddressSync(
-  [Buffer.from("marketplace"), utf8.encode(PROGRAM_NAME)],
+  [Buffer.from("marketplace"), Buffer.from(PROGRAM_NAME)],
   PROGRAM_ID,
 );
 
 // Listing PDA
 const deriveListingPDA = (makerMint: PublicKey) => {
   const [listingPda] = PublicKey.findProgramAddressSync(
-    [Uint8Array.from(marketplacePda.toBuffer()), makerMint.toBuffer()],
+    [marketplacePda.toBuffer(), makerMint.toBuffer()],
     PROGRAM_ID,
   );
 
@@ -22,7 +21,7 @@ const deriveListingPDA = (makerMint: PublicKey) => {
 const deriveMetadataPDA = (makerMint: PublicKey) => {
   const [metadataPDA] = PublicKey.findProgramAddressSync(
     [Buffer.from("metadata"), METADATA_ID.toBuffer(), makerMint.toBuffer()],
-    PROGRAM_ID,
+    METADATA_ID,
   );
 
   return metadataPDA;
@@ -46,11 +45,11 @@ const deriveMasterEditionPDA = (makerMint: PublicKey) => {
   const [masterEditionPDA] = PublicKey.findProgramAddressSync(
     [
       Buffer.from("metadata"),
-      PROGRAM_ID.toBuffer(),
+      METADATA_ID.toBuffer(),
       makerMint.toBuffer(),
       Buffer.from("edition"),
     ],
-    PROGRAM_ID,
+    METADATA_ID,
   );
 
   return masterEditionPDA;
