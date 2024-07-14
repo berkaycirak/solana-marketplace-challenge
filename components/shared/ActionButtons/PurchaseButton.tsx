@@ -20,7 +20,8 @@ const PurchaseButton = ({
   const program = useProgram();
   const { publicKey: signerPublicKey, sendTransaction } = useWallet();
   // List click logic
-  const handleBuy = async () => {
+  const handleBuy = async (e: MouseEvent) => {
+    e.stopPropagation();
     if (program && signerPublicKey) {
       // Take the promise then pass it to toaster for user feedback on UI
       const listNftPromise = purchase_nft({

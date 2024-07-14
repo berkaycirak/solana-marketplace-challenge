@@ -40,30 +40,18 @@ const YourAssets = () => {
   return (
     <div className="p-12">
       {assetInfos?.map((asset) => {
-        const nft_mint_address = asset.id;
-        // not sure if the grouping same with collection
-        const collection_address = asset.grouping[0].group_value;
-
-        const name = asset.content.metadata.name;
-        const image = asset.content.links.image;
-        const description = asset.content.metadata.description;
         return (
           <div key={asset.id}>
-            <div>
-              <h5 className="font-bold">{asset.content.metadata.name}</h5>
-              <p>{description}</p>
-            </div>
-
             <NFT
-              description={description}
-              image={image}
-              mintAddress={nft_mint_address}
-              name={name}
+              mintAddress={asset.id}
+              description={asset.content.metadata.description}
+              image={asset.content.links.image}
+              name={asset.content.metadata.name}
               price={0}
               button={
                 <ListButton
-                  nftMintAddress={nft_mint_address}
-                  collectionAddress={collection_address}
+                  nftMintAddress={asset.id}
+                  collectionAddress={asset.grouping[0].group_value}
                 />
               }
             />

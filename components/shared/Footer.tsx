@@ -13,7 +13,7 @@ const Footer = () => {
           "flex cursor-pointer items-center justify-center gap-2 text-center",
         )}
       >
-        powered by <span className="font-bold">KindaDev</span>
+        powered by <span className="font-bold text-primary/90">KindaDev</span>
         <ExternalLink size={14} />
       </Link>
     </div>

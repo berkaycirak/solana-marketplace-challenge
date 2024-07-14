@@ -10,7 +10,7 @@ const Navbar = () => {
       {/* Main Navbar */}
       <div className="flex h-[2rem] w-full items-center justify-between">
         <Link href={"/"} className={cn("font-bold text-white")}>
-          <h4>RabiddHall</h4>
+          <h4>RabidHall</h4>
         </Link>
         <WalletSection />
       </div>

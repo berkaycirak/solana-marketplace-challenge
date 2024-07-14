@@ -5,6 +5,7 @@ import { useWallet } from "@solana/wallet-adapter-react";
 import React from "react";
 import WalletButton from "../WalletButton";
 import { redditMono } from "@/app/fonts";
+import SolanaIcon from "@/assets/icon/SolanaIcon";
 
 const WalletSection = () => {
   const { balance, errorMessage, status } = useBalance();
@@ -12,14 +13,14 @@ const WalletSection = () => {
   return (
     <div className="flex items-center space-x-4">
       {connected && (
-        <span
+        <p
           className={cn(
-            "min-w-[100px] cursor-pointer rounded border px-4 py-3 text-white",
+            "flex min-w-[100px] cursor-pointer items-center gap-2 rounded border px-4 py-3 text-white",
             redditMono.className,
           )}
         >
-          {balance} SOL
-        </span>
+          {balance} <SolanaIcon />
+        </p>
       )}
 
       <WalletButton />
