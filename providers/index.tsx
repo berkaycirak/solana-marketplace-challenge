@@ -12,7 +12,16 @@ const Providers = ({ children }: ProvidersProps) => {
     <QueryProvider>
       <AppWalletProvider>
         {children}
-        <Toaster />
+        <Toaster
+          toastOptions={{
+            style: {
+              backgroundColor: "InfoBackground",
+              border: "2px dashed black",
+              fontSize: "16px",
+              fontWeight: "bold",
+            },
+          }}
+        />
       </AppWalletProvider>
     </QueryProvider>
   );
