@@ -8,6 +8,7 @@ import {
   marketplacePda,
 } from "../program-accounts/pda";
 import {
+  Keypair,
   LAMPORTS_PER_SOL,
   PublicKey,
   SystemProgram,
@@ -68,6 +69,7 @@ const nft_list = async ({
       .instruction();
     // add that instruction into transaction to be signed from wallet
     transaction.add(instruction);
+    console.log(transaction);
     return transaction;
   } catch (error) {
     console.log(error);

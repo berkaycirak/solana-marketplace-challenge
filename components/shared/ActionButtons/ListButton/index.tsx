@@ -29,6 +29,7 @@ const ListButton = ({ collectionAddress, nftMintAddress }: ListButtonProps) => {
   const { publicKey: signerPublicKey, sendTransaction } = useWallet();
   // List click logic
   const handleList = async (price: number) => {
+    console.log(collectionAddress);
     if (program && signerPublicKey) {
       // Take the promise then pass it to toaster for user feedback on UI
       const listNftPromise = nft_list({
@@ -36,7 +37,7 @@ const ListButton = ({ collectionAddress, nftMintAddress }: ListButtonProps) => {
         signer: signerPublicKey,
         collectionMint: new PublicKey(collectionAddress),
         makerMint: new PublicKey(nftMintAddress),
-        price,
+        price: 1,
       });
       try {
         toast.promise(listNftPromise, {
@@ -44,7 +45,8 @@ const ListButton = ({ collectionAddress, nftMintAddress }: ListButtonProps) => {
           success: async (data) => {
             console.log(data);
             if (data) {
-              await sendTransaction(data, connection);
+              const error = await sendTransaction(data, connection);
+              console.log(error);
               return `${!data ? "An error occured" : "Successful, you have listed your NFT"}`;
             }
           },

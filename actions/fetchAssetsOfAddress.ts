@@ -23,19 +23,19 @@ export const fetchAssetsOfAddress = async ({
 }) => {
   const mintAddresses: Asset[] = await getMintAddressesOfAssets(address);
   console.log(mintAddresses);
-  mintAddresses.forEach(async (address) => {
-    const data = await getAsset(address.address);
-    console.log(data);
-    return {
+
+  const data = await getAsset("H1rRihhRPtAi14TaHTN8RrtXHeK7a6qHq1HRY6zjA7U6");
+  console.log(data);
+  return [
+    {
       name: data.content.metadata.name,
       description: data.content.metadata.description,
       image: data.content.links.image,
-    };
-  });
-
-  // const filteredAssets = verifiedCollectionAssets.filter((nft) =>
-  //   Object.keys(nft.metadata.collection).includes("value"),
-  // );
-
-  return "filteredAssets";
+      ...data,
+    },
+  ];
 };
+
+// const filteredAssets = verifiedCollectionAssets.filter((nft) =>
+//   Object.keys(nft.metadata.collection).includes("value"),
+// );

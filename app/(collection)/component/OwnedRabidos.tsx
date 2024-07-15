@@ -41,26 +41,25 @@ const OwnedRabidos = () => {
   return (
     <div className="flex flex-wrap content-start gap-2 sm:gap-6">
       {assetInfos?.length === 0 && "There is no NFT Yet!"}
-      {/* {assetInfos?.map((asset) => {
-        console.log(asset.metadata);
+      {assetInfos?.map((asset) => {
         return (
-          <div key={asset.publicKey} className="flex flex-wrap">
+          <div key={asset.id} className="flex flex-wrap">
             <NFT
-              mintAddress={asset.publicKey}
+              mintAddress={asset.id}
               description={"Description"}
-              image={asset.metadata.uri}
-              name={asset.metadata.name}
+              image={asset.image}
+              name={asset.name}
               price={0}
               button={
                 <ListButton
-                  nftMintAddress={asset.publicKey}
-                  collectionAddress={"x"}
+                  nftMintAddress={asset.id}
+                  collectionAddress={asset.grouping[0].group_value}
                 />
               }
             />
           </div>
         );
-      })} */}
+      })}
     </div>
   );
 };
