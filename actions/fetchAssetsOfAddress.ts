@@ -6,6 +6,7 @@ import { fetchAllDigitalAsset } from "@metaplex-foundation/mpl-token-metadata";
 import { createUmi } from "@metaplex-foundation/umi-bundle-defaults";
 import { clusterApiUrl } from "@solana/web3.js";
 import { getAsset } from "./getAssets";
+import { publicKey } from "@metaplex-foundation/umi";
 
 interface Asset {
   address: string;
@@ -21,19 +22,20 @@ export const fetchAssetsOfAddress = async ({
 }: {
   address: string;
 }) => {
+  const umi = createUmi(clusterApiUrl("devnet"));
   const mintAddresses: Asset[] = await getMintAddressesOfAssets(address);
   console.log(mintAddresses);
+  const data = await fetchAllDigitalAsset(
+    umi,
+    mintAddresses.map((address) => publicKey(address.mint)),
+  );
 
-  const data = await getAsset("H1rRihhRPtAi14TaHTN8RrtXHeK7a6qHq1HRY6zjA7U6");
-  console.log(data);
-  return [
-    {
-      name: data.content.metadata.name,
-      description: data.content.metadata.description,
-      image: data.content.links.image,
-      ...data,
-    },
-  ];
+  console.log();
+  const filterDataForCollectionNfts = data.filter((asset) =>
+    Object.keys(asset.metadata.collection).includes("value"),
+  );
+
+  return filterDataForCollectionNfts;
 };
 
 // const filteredAssets = verifiedCollectionAssets.filter((nft) =>

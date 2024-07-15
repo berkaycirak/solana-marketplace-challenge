@@ -43,17 +43,17 @@ const OwnedRabidos = () => {
       {assetInfos?.length === 0 && "There is no NFT Yet!"}
       {assetInfos?.map((asset) => {
         return (
-          <div key={asset.id} className="flex flex-wrap">
+          <div key={asset.publicKey} className="flex flex-wrap">
             <NFT
-              mintAddress={asset.id}
+              mintAddress={asset.mint.publicKey}
               description={"Description"}
-              image={asset.image}
-              name={asset.name}
+              image={asset.metadata.uri}
+              name={asset.metadata.name}
               price={0}
               button={
                 <ListButton
-                  nftMintAddress={asset.id}
-                  collectionAddress={asset.grouping[0].group_value}
+                  nftMintAddress={asset.mint.publicKey}
+                  collectionAddress={asset.metadata.collection.value.key}
                 />
               }
             />

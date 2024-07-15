@@ -28,30 +28,24 @@ const ListButton = ({ collectionAddress, nftMintAddress }: ListButtonProps) => {
   const program = useProgram();
   const { publicKey: signerPublicKey, sendTransaction } = useWallet();
   // List click logic
-  const handleList = async (price: number) => {
-    console.log(collectionAddress);
+  const handleList = async (e: any) => {
+    e.stopPropagation();
     if (program && signerPublicKey) {
       // Take the promise then pass it to toaster for user feedback on UI
-      const listNftPromise = nft_list({
-        program,
-        signer: signerPublicKey,
-        collectionMint: new PublicKey(collectionAddress),
-        makerMint: new PublicKey(nftMintAddress),
-        price: 1,
-      });
+
       try {
-        toast.promise(listNftPromise, {
-          loading: "NFT is listing...",
-          success: async (data) => {
-            console.log(data);
-            if (data) {
-              const error = await sendTransaction(data, connection);
-              console.log(error);
-              return `${!data ? "An error occured" : "Successful, you have listed your NFT"}`;
-            }
-          },
-          error: "An error occured!",
+        const tx = await nft_list({
+          program,
+          signer: signerPublicKey,
+          collectionMint: new PublicKey(collectionAddress),
+          makerMint: new PublicKey(nftMintAddress),
+          price: 0.05,
         });
+
+        if (tx) {
+          const signature = await sendTransaction(tx, connection);
+          console.log(signature);
+        }
       } catch (error) {
         console.log(error);
       }
@@ -62,57 +56,60 @@ const ListButton = ({ collectionAddress, nftMintAddress }: ListButtonProps) => {
   const [listPrice, setListPrice] = useState<number>(0);
 
   return (
-    <Drawer>
-      <DrawerTrigger asChild>
-        <Button className="w-full">List</Button>
-      </DrawerTrigger>
-      <DrawerContent>
-        <DrawerHeader>
-          <DrawerTitle>List your NFT</DrawerTitle>
-          <DrawerDescription>
-            You can list your NFT by paying and confirming from your adapted
-            wallet.
-            <div className="flex items-center justify-center space-x-2">
-              <Button
-                variant="outline"
-                size="icon"
-                className="h-8 w-8 shrink-0 rounded-full"
-                onClick={() => handleList(listPrice)}
-                disabled={listPrice <= 0}
-              >
-                <Minus className="h-4 w-4" />
-                <span className="sr-only">Decrease</span>
-              </Button>
-              <div className="flex-1 text-center">
-                <div className="text-7xl font-bold tracking-tighter">
-                  <span className="" ref={listPriceRef}>
-                    {listPrice}
-                  </span>
-                </div>
-                <div className="text-[0.70rem] uppercase text-muted-foreground"></div>
-              </div>
-              <Button
-                variant="outline"
-                size="icon"
-                className="h-8 w-8 shrink-0 rounded-full"
-                onClick={() => setListPrice((prev) => prev + 1)}
-              >
-                <Plus className="h-4 w-4" />
-                <span className="sr-only">Increase</span>
-              </Button>
-            </div>
-          </DrawerDescription>
-        </DrawerHeader>
-        <DrawerFooter>
-          <Button>List</Button>
-          <DrawerClose>
-            <Button className="w-full" variant="outline">
-              Cancel
-            </Button>
-          </DrawerClose>
-        </DrawerFooter>
-      </DrawerContent>
-    </Drawer>
+    <Button className="w-full" onClick={handleList}>
+      List
+    </Button>
+    // <Drawer>
+    //   <DrawerTrigger asChild>
+    //     <Button className="w-full">List</Button>
+    //   </DrawerTrigger>
+    //   <DrawerContent>
+    //     <DrawerHeader>
+    //       <DrawerTitle>List your NFT</DrawerTitle>
+    //       <DrawerDescription>
+    //         You can list your NFT by paying and confirming from your adapted
+    //         wallet.
+    //         <div className="flex items-center justify-center space-x-2">
+    //           <Button
+    //             variant="outline"
+    //             size="icon"
+    //             className="h-8 w-8 shrink-0 rounded-full"
+    //             onClick={() => handleList(listPrice)}
+    //             disabled={listPrice <= 0}
+    //           >
+    //             <Minus className="h-4 w-4" />
+    //             <span className="sr-only">Decrease</span>
+    //           </Button>
+    //           <div className="flex-1 text-center">
+    //             <div className="text-7xl font-bold tracking-tighter">
+    //               <span className="" ref={listPriceRef}>
+    //                 {listPrice}
+    //               </span>
+    //             </div>
+    //             <div className="text-[0.70rem] uppercase text-muted-foreground"></div>
+    //           </div>
+    //           <Button
+    //             variant="outline"
+    //             size="icon"
+    //             className="h-8 w-8 shrink-0 rounded-full"
+    //             onClick={() => setListPrice((prev) => prev + 1)}
+    //           >
+    //             <Plus className="h-4 w-4" />
+    //             <span className="sr-only">Increase</span>
+    //           </Button>
+    //         </div>
+    //       </DrawerDescription>
+    //     </DrawerHeader>
+    //     <DrawerFooter>
+    //       <Button>List</Button>
+    //       <DrawerClose>
+    //         <Button className="w-full" variant="outline">
+    //           Cancel
+    //         </Button>
+    //       </DrawerClose>
+    //     </DrawerFooter>
+    //   </DrawerContent>
+    // </Drawer>
   );
 };
 
