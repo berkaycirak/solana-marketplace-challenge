@@ -1,6 +1,5 @@
-import { AnchorMarketplace } from "@/idl/anchor_marketplace";
-import { BN, Program } from "@coral-xyz/anchor";
-import { METADATA_ID, signerWallet } from "../constants";
+import { BN } from "@coral-xyz/anchor";
+import { METADATA_ID } from "../constants";
 import {
   deriveListingPDA,
   deriveMetadataPDA,
@@ -8,9 +7,6 @@ import {
   marketplacePda,
 } from "../program-accounts/pda";
 import {
-  clusterApiUrl,
-  Connection,
-  Keypair,
   LAMPORTS_PER_SOL,
   PublicKey,
   SystemProgram,
@@ -38,22 +34,14 @@ const nft_list = async ({
   collectionMint,
   price,
 }: NFT_LIST) => {
-  const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
   // Find maker ATA account
-  console.log(makerMint.toBase58());
   const makerATA = getAssociatedTokenAddressSync(makerMint, signer);
-  console.log(makerATA.toBase58());
-
   // Derive required PDAs which takes makerMint as a param
   const listingPDA = deriveListingPDA(makerMint);
 
   const vault = getAssociatedTokenAddressSync(makerMint, listingPDA, true);
   const metadataPDA = deriveMetadataPDA(makerMint);
   const masterEditionPDA = deriveMasterEditionPDA(makerMint);
-  const keypair = Keypair.fromSecretKey(new Uint8Array(signerWallet));
-
-  // Get latest blockhash
-  // const recentBlockhash = await connection.getLatestBlockhash();
 
   try {
     //   make an instruction
@@ -77,9 +65,8 @@ const nft_list = async ({
       .instruction();
 
     const transaction = new Transaction();
-    transaction.add(listIx);
-
     // add that instruction into transaction to be signed from wallet
+    transaction.add(listIx);
 
     return transaction;
   } catch (error) {

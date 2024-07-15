@@ -1,23 +1,13 @@
 import { AnchorMarketplace } from "@/idl/anchor_marketplace";
 import { Program } from "@coral-xyz/anchor";
 
-import {
-  deriveListingPDA,
-  marketplacePda,
-  vaultPDA,
-} from "../program-accounts/pda";
-import {
-  Keypair,
-  PublicKey,
-  SystemProgram,
-  Transaction,
-} from "@solana/web3.js";
+import { deriveListingPDA, marketplacePda } from "../program-accounts/pda";
+import { PublicKey, SystemProgram, Transaction } from "@solana/web3.js";
 import {
   getAssociatedTokenAddressSync,
   TOKEN_PROGRAM_ID,
 } from "@solana/spl-token";
 import { MarketplaceProgram } from "@/types";
-import { signerWallet } from "../constants";
 
 interface NFT_LIST {
   program: MarketplaceProgram;
@@ -36,7 +26,6 @@ const delist_nft = async ({ program, signer, ownerMint, owner }: NFT_LIST) => {
   const transaction = new Transaction();
 
   try {
-    const signerWT = Keypair.fromSecretKey(new Uint8Array(signerWallet));
     //   make an instruction
     const delistIx = await program.methods
       .delist()

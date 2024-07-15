@@ -34,10 +34,6 @@ export type DigitalAsset = {
 const OwnedRabidos = () => {
   const { assetInfos, status } = useAddressAssets();
 
-  const { connection } = useConnection();
-  const { publicKey: signerPublicKey, sendTransaction } = useWallet();
-  const program = useProgram();
-
   return (
     <div className="flex flex-wrap content-start gap-2 sm:gap-6">
       {assetInfos?.length === 0 && "There is no NFT Yet!"}
@@ -53,6 +49,7 @@ const OwnedRabidos = () => {
               button={
                 <ListButton
                   nftMintAddress={asset.mint.publicKey}
+                  // @ts-ignore
                   collectionAddress={asset.metadata.collection.value.key}
                 />
               }
