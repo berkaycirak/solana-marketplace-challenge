@@ -10,11 +10,13 @@ import { toast } from "sonner";
 interface PurchaseButtonProps {
   sellerMintAddress: string;
   sellerWalletAddress: string;
+  refetch: any;
 }
 
 const PurchaseButton = ({
   sellerMintAddress,
   sellerWalletAddress,
+  refetch,
 }: PurchaseButtonProps) => {
   const { connection } = useConnection();
   const program = useProgram();
@@ -37,6 +39,7 @@ const PurchaseButton = ({
             console.log(data);
             if (data) {
               const signature = await sendTransaction(data, connection);
+              refetch();
               console.log(signature);
               return `${!data ? "An error occured" : "Successful, you have bought your NFT"}`;
             }

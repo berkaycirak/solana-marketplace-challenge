@@ -32,7 +32,7 @@ export type DigitalAsset = {
 };
 
 const OwnedRabidos = () => {
-  const { assetInfos, status } = useAddressAssets();
+  const { assetInfos, status, refetch } = useAddressAssets();
 
   return (
     <div className="flex flex-wrap content-start gap-2 sm:gap-6">
@@ -45,9 +45,9 @@ const OwnedRabidos = () => {
               description={"Description"}
               image={asset.metadata.uri}
               name={asset.metadata.name}
-              price={0}
               button={
                 <ListButton
+                  refetch={refetch}
                   nftMintAddress={asset.mint.publicKey}
                   // @ts-ignore
                   collectionAddress={asset.metadata.collection.value.key}

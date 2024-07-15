@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import YourAssets from "./component/OwnedRabidos";
 import ListedAssets from "./component/ListedAssets";
@@ -5,8 +7,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Lock } from "lucide-react";
 import OwnedListings from "./component/OwnedListings";
 import OwnedRabidos from "./component/OwnedRabidos";
+import { useWallet } from "@solana/wallet-adapter-react";
 
 const CollectionPage = () => {
+  const { connected } = useWallet();
+  console.log(connected);
   return (
     <section className="container mx-auto p-2 md:p-12">
       {/* Banner For MarketHall  */}
@@ -15,11 +20,15 @@ const CollectionPage = () => {
       <Tabs defaultValue="market" className="mx-auto w-full">
         <TabsList className="mx-auto mb-6 flex w-full items-center md:max-w-screen-md xl:mb-12 2xl:max-w-screen-lg">
           <TabsTrigger value="market">Market</TabsTrigger>
-          <TabsTrigger value="owned">Owned Rabbidos</TabsTrigger>
-          <TabsTrigger value="your_listing">Owned Listings</TabsTrigger>
-          <TabsTrigger value="mint" className="cursor-not-allowed" disabled>
-            <Lock size={14} /> Mint Rabiddo
-          </TabsTrigger>
+          {connected && (
+            <>
+              <TabsTrigger value="owned">Owned Rabbidos</TabsTrigger>
+              <TabsTrigger value="your_listing">Owned Listings</TabsTrigger>
+              <TabsTrigger value="mint" className="cursor-not-allowed" disabled>
+                <Lock size={14} /> Mint Rabiddo
+              </TabsTrigger>
+            </>
+          )}
         </TabsList>
         <TabsContent value="market">
           <ListedAssets />
