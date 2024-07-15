@@ -57,7 +57,7 @@ const nft_list = async ({
 
   try {
     //   make an instruction
-    const listIx = await program.methods
+    const signature = await program.methods
       .list(new BN(price * LAMPORTS_PER_SOL))
       .accounts({
         maker: signer,
@@ -76,6 +76,8 @@ const nft_list = async ({
       })
       .signers([keypair])
       .rpc();
+
+    console.log(signature);
     // add that instruction into transaction to be signed from wallet
 
     return transaction;
