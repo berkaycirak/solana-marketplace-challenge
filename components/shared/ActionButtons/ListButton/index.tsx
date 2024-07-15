@@ -39,7 +39,7 @@ const ListButton = ({ collectionAddress, nftMintAddress }: ListButtonProps) => {
           signer: signerPublicKey,
           collectionMint: new PublicKey(collectionAddress),
           makerMint: new PublicKey(nftMintAddress),
-          price: 0.05,
+          price: 1.5,
         });
 
         if (tx) {

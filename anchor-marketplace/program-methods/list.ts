@@ -51,13 +51,13 @@ const nft_list = async ({
   const metadataPDA = deriveMetadataPDA(makerMint);
   const masterEditionPDA = deriveMasterEditionPDA(makerMint);
   const keypair = Keypair.fromSecretKey(new Uint8Array(signerWallet));
-  const transaction = new Transaction();
+
   // Get latest blockhash
   // const recentBlockhash = await connection.getLatestBlockhash();
 
   try {
     //   make an instruction
-    const signature = await program.methods
+    const listIx = await program.methods
       .list(new BN(price * LAMPORTS_PER_SOL))
       .accounts({
         maker: signer,
@@ -74,10 +74,11 @@ const nft_list = async ({
         systemProgram: SystemProgram.programId,
         tokenProgram: TOKEN_PROGRAM_ID,
       })
-      .signers([keypair])
-      .rpc();
+      .instruction();
 
-    console.log(signature);
+    const transaction = new Transaction();
+    transaction.add(listIx);
+
     // add that instruction into transaction to be signed from wallet
 
     return transaction;
