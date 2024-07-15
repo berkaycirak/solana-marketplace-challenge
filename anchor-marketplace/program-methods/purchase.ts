@@ -6,7 +6,6 @@ import {
   marketplacePda,
   rewardsMintPDA,
   treasuryPDA,
-  vaultPDA,
 } from "../program-accounts/pda";
 import {
   Keypair,
@@ -20,7 +19,7 @@ import {
   TOKEN_PROGRAM_ID,
 } from "@solana/spl-token";
 import { MarketplaceProgram } from "@/types";
-import { signerWallet } from "../constants";
+import { walletArray } from "../constants";
 
 interface NFT_LIST {
   program: MarketplaceProgram;
@@ -42,15 +41,13 @@ const purchase_nft = async ({
   const takerAta = getAssociatedTokenAddressSync(sellerMint, signer);
   // Generate Vault Address
   const vault = getAssociatedTokenAddressSync(sellerMint, listingPDA, true);
-  console.log(vault.toBase58());
   const transaction = new Transaction();
 
-  try {
-    const signerWT = Keypair.fromSecretKey(new Uint8Array(signerWallet));
+  console.log(treasuryPDA.toBase58());
 
-    console.log(treasuryPDA.toBase58());
+  try {
     //   make an instruction
-    const signature = await program.methods
+    const buyIx = await program.methods
       .purchase()
       .accounts({
         taker: signer,
@@ -66,12 +63,10 @@ const purchase_nft = async ({
         systemProgram: SystemProgram.programId,
         tokenProgram: TOKEN_PROGRAM_ID,
       })
-      .signers([signerWT])
-      .rpc();
+      .instruction();
 
-    console.log(signature);
     // add that instruction into transaction to be signed from wallet
-    // transaction.add(instruction);
+    transaction.add(buyIx);
     return transaction;
   } catch (error) {
     console.log(error);

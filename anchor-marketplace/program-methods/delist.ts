@@ -1,23 +1,13 @@
 import { AnchorMarketplace } from "@/idl/anchor_marketplace";
 import { Program } from "@coral-xyz/anchor";
 
-import {
-  deriveListingPDA,
-  marketplacePda,
-  vaultPDA,
-} from "../program-accounts/pda";
-import {
-  Keypair,
-  PublicKey,
-  SystemProgram,
-  Transaction,
-} from "@solana/web3.js";
+import { deriveListingPDA, marketplacePda } from "../program-accounts/pda";
+import { PublicKey, SystemProgram, Transaction } from "@solana/web3.js";
 import {
   getAssociatedTokenAddressSync,
   TOKEN_PROGRAM_ID,
 } from "@solana/spl-token";
 import { MarketplaceProgram } from "@/types";
-import { signerWallet } from "../constants";
 
 interface NFT_LIST {
   program: MarketplaceProgram;
@@ -32,13 +22,12 @@ const delist_nft = async ({ program, signer, ownerMint, owner }: NFT_LIST) => {
   const listingPDA = deriveListingPDA(ownerMint);
   //   Find takerATA
   const ownerATA = getAssociatedTokenAddressSync(ownerMint, signer);
-
+  const vault = getAssociatedTokenAddressSync(ownerMint, listingPDA, true);
   const transaction = new Transaction();
 
   try {
-    const signerWT = Keypair.fromSecretKey(new Uint8Array(signerWallet));
     //   make an instruction
-    const signature = await program.methods
+    const delistIx = await program.methods
       .delist()
       .accounts({
         maker: owner,
@@ -46,14 +35,13 @@ const delist_nft = async ({ program, signer, ownerMint, owner }: NFT_LIST) => {
         makerMint: ownerMint,
         makerAta: ownerATA,
         listing: listingPDA,
-        vault: vaultPDA,
+        vault: vault,
         systemProgram: SystemProgram.programId,
         tokenProgram: TOKEN_PROGRAM_ID,
       })
-      .signers([signerWT])
-      .rpc();
+      .instruction();
     // add that instruction into transaction to be signed from wallet
-    console.log(signature);
+    transaction.add(delistIx);
     return transaction;
   } catch (error) {
     console.log(error);

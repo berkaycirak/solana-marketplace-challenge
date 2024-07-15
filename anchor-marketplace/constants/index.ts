@@ -12,23 +12,11 @@ const METADATA_ID = new PublicKey(
 );
 const PROGRAM_NAME = "berkai";
 
-const private_key =
-  "466cVVMfthgc12GazPQjoPeq4wW4ePsDYdT8GwUhpHW35vScEGYu3YSA23zyx92H4duCEtiXzukNHQvWs7dJ9KXc";
-
-const public_key = "6LHit9vc5XxG4a8iFzKsAHBNf1HTEM1sRLPht6YbdoqP";
-
-const signerWallet = [
-  247, 248, 34, 22, 46, 207, 17, 172, 89, 161, 131, 112, 225, 63, 49, 253, 15,
-  144, 33, 53, 241, 173, 11, 97, 105, 185, 136, 109, 241, 150, 98, 103, 79, 59,
-  96, 179, 248, 55, 190, 208, 70, 248, 171, 42, 124, 35, 24, 163, 133, 146, 219,
-  132, 229, 101, 19, 192, 130, 106, 139, 74, 177, 49, 246, 78,
+const walletArray = [
+  154, 114, 61, 30, 44, 129, 70, 138, 67, 221, 84, 15, 36, 94, 188, 76, 127, 97,
+  86, 68, 110, 203, 29, 104, 39, 147, 97, 69, 146, 174, 166, 17, 153, 93, 227,
+  192, 155, 68, 9, 193, 174, 59, 65, 214, 25, 202, 7, 246, 88, 180, 69, 117, 41,
+  101, 224, 48, 31, 201, 183, 35, 10, 83, 106, 199,
 ];
 
-export {
-  PROGRAM_ID,
-  METADATA_ID,
-  PROGRAM_NAME,
-  private_key,
-  public_key,
-  signerWallet,
-};
+export { PROGRAM_ID, METADATA_ID, PROGRAM_NAME, walletArray };

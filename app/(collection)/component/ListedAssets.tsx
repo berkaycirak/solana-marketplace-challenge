@@ -16,7 +16,6 @@ const ListedAssets = () => {
   const { othersListings, status } = useListedAssets();
 
   const { publicKey } = useWallet();
-  console.log(publicKey);
 
   return (
     <div className="flex flex-wrap content-start gap-2 sm:gap-6">

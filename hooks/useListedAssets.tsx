@@ -15,12 +15,11 @@ const useListedAssets = () => {
     if (program && publicKey) {
       try {
         const listings = await getListingAccounts(program);
+
         const listingPromises = listings.map(async (listing) => {
           const mintAddress = listing.account.mint.toBase58();
           const owner = listing.account.maker.toBase58();
           const data = await getAsset(mintAddress);
-
-          console.log(listing.publicKey.toBase58());
 
           return {
             price: Number(listing.account.price) / LAMPORTS_PER_SOL,

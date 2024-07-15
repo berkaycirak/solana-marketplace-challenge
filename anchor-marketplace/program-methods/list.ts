@@ -1,5 +1,4 @@
-import { AnchorMarketplace } from "@/idl/anchor_marketplace";
-import { BN, Program } from "@coral-xyz/anchor";
+import { BN } from "@coral-xyz/anchor";
 import { METADATA_ID } from "../constants";
 import {
   deriveListingPDA,
@@ -37,18 +36,16 @@ const nft_list = async ({
 }: NFT_LIST) => {
   // Find maker ATA account
   const makerATA = getAssociatedTokenAddressSync(makerMint, signer);
-
   // Derive required PDAs which takes makerMint as a param
   const listingPDA = deriveListingPDA(makerMint);
 
   const vault = getAssociatedTokenAddressSync(makerMint, listingPDA, true);
   const metadataPDA = deriveMetadataPDA(makerMint);
   const masterEditionPDA = deriveMasterEditionPDA(makerMint);
-  const transaction = new Transaction();
 
   try {
     //   make an instruction
-    const instruction = await program.methods
+    const listIx = await program.methods
       .list(new BN(price * LAMPORTS_PER_SOL))
       .accounts({
         maker: signer,
@@ -66,8 +63,11 @@ const nft_list = async ({
         tokenProgram: TOKEN_PROGRAM_ID,
       })
       .instruction();
+
+    const transaction = new Transaction();
     // add that instruction into transaction to be signed from wallet
-    transaction.add(instruction);
+    transaction.add(listIx);
+
     return transaction;
   } catch (error) {
     console.log(error);
