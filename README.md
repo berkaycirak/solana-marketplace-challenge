@@ -6,6 +6,8 @@ That is a web3 NFT marketplace application in which users can `sell` and `buy` n
 
 Program is written with **Anchor** by [ASCorreia](https://github.com/ASCorreia/anchor-marketplace)
 
+Program Address: `ExVEuRgiSqhPogdkQiWT4vH4A6EjnWkyoUNKCrJeAS7r`
+
 > [!IMPORTANT]
 > To run that repo on your machine
 
