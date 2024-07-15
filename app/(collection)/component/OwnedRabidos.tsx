@@ -45,7 +45,6 @@ const OwnedRabidos = () => {
               description={"Description"}
               image={asset.metadata.uri}
               name={asset.metadata.name}
-              price={0}
               button={
                 <ListButton
                   refetch={refetch}
