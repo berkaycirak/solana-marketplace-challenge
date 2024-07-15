@@ -11,8 +11,9 @@ import { toast } from "sonner";
 interface DelistButtonProps {
   ownerMint: string;
   owner: string;
+  refetch: any;
 }
-const DelistButton = ({ owner, ownerMint }: DelistButtonProps) => {
+const DelistButton = ({ owner, ownerMint, refetch }: DelistButtonProps) => {
   const program = useProgram();
   const { publicKey: connectedKey, sendTransaction } = useWallet();
   const { connection } = useConnection();
@@ -32,6 +33,7 @@ const DelistButton = ({ owner, ownerMint }: DelistButtonProps) => {
           success: async (data) => {
             if (data) {
               const signature = await sendTransaction(data, connection);
+              refetch();
               console.log(signature);
               return "You have cancelled your listing!";
             }

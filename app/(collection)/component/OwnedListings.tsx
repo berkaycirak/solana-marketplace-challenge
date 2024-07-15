@@ -9,7 +9,7 @@ import DelistButton from "@/components/shared/ActionButtons/DelistButton";
 import PurchaseButton from "@/components/shared/ActionButtons/PurchaseButton";
 
 const OwnedListings = () => {
-  const { connectedAccountListings, status } = useListedAssets();
+  const { connectedAccountListings, status, refetch } = useListedAssets();
   console.log(connectedAccountListings);
 
   const { publicKey } = useWallet();
@@ -26,11 +26,13 @@ const OwnedListings = () => {
             button={
               isOwner ? (
                 <DelistButton
+                  refetch={refetch}
                   owner={asset.owner}
                   ownerMint={asset.mintAddress}
                 />
               ) : (
                 <PurchaseButton
+                  refetch={refetch}
                   sellerMintAddress={asset.mintAddress}
                   sellerWalletAddress={asset.owner}
                 />

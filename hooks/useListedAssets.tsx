@@ -51,7 +51,7 @@ const useListedAssets = () => {
     }
   };
 
-  const { data, status } = useQuery({
+  const { data, status, refetch } = useQuery({
     queryFn: fetchListings,
     queryKey: ["listed_nfts"],
     refetchInterval: 10 * 60 * 1000, //10sec
@@ -61,6 +61,7 @@ const useListedAssets = () => {
     connectedAccountListings: data?.yourListings,
     othersListings: data?.otherListings,
     status,
+    refetch,
   };
 };
 

@@ -21,9 +21,14 @@ import { Minus, Plus } from "lucide-react";
 interface ListButtonProps {
   collectionAddress: string;
   nftMintAddress: string;
+  refetch: any;
 }
 
-const ListButton = ({ collectionAddress, nftMintAddress }: ListButtonProps) => {
+const ListButton = ({
+  collectionAddress,
+  nftMintAddress,
+  refetch,
+}: ListButtonProps) => {
   const { connection } = useConnection();
   const program = useProgram();
   const { publicKey: signerPublicKey, sendTransaction } = useWallet();
@@ -34,18 +39,27 @@ const ListButton = ({ collectionAddress, nftMintAddress }: ListButtonProps) => {
       // Take the promise then pass it to toaster for user feedback on UI
 
       try {
-        const tx = await nft_list({
+        const listPromise = nft_list({
           program,
           signer: signerPublicKey,
           collectionMint: new PublicKey(collectionAddress),
           makerMint: new PublicKey(nftMintAddress),
+          // TODO:get the price from user
           price: 1.5,
         });
 
-        if (tx) {
-          const signature = await sendTransaction(tx, connection);
-          console.log(signature);
-        }
+        toast.promise(listPromise, {
+          loading: "Cancelling listing...",
+          success: async (data) => {
+            if (data) {
+              const signature = await sendTransaction(data, connection);
+              refetch();
+              console.log(signature);
+              return "You have cancelled your listing!";
+            }
+          },
+          error: "An error occured",
+        });
       } catch (error) {
         console.log(error);
       }
