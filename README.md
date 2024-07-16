@@ -22,4 +22,6 @@ bun run dev
 
 - As a user, I can <ins>list</ins> my collection nfts
 - As a user, I can <ins>purchase</ins> an nft from the market
-- As a user, I able to <ins>delist</ins> my listed nfts
+- As a user, I am able to <ins>delist</ins> my listed nfts,
+- As a user, I can't buy nft if the balance is not enough,
+- As a user, I can't write negative prices while listing
