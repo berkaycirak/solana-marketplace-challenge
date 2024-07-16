@@ -30,13 +30,13 @@ const NFT = ({
   return (
     <Dialog>
       <DialogTrigger>
-        <div className="h-[200px] w-[200px] sm:h-[300px] sm:w-[300px]">
+        <div className="">
           <Image
             src={image}
             alt={name}
             width={300}
             height={300}
-            className="mb-1 cursor-pointer rounded-lg border border-gray-300 shadow-md shadow-black"
+            className="mb-1 h-[200px] w-[200px] cursor-pointer rounded-lg border border-gray-300 shadow-md shadow-black sm:h-[300px] sm:w-[300px]"
           />
           <div className="flex items-center justify-between gap-2 px-2">
             <h5 className="font-semibold">{name}</h5>
