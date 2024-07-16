@@ -25,3 +25,5 @@ bun run dev
 - As a user, I am able to <ins>delist</ins> my listed nfts,
 - As a user, I can't buy nft if the balance is not enough,
 - As a user, I can't write negative prices while listing
+
+> [!NOTE] > [Helius](https://docs.helius.dev/) is used in some rpc request as an external api service. Due to their free restrictions, refetching and polling sometimes give `429: Too many request` error.
