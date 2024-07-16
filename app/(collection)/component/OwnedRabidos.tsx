@@ -45,7 +45,6 @@ const OwnedRabidos = () => {
               description={asset.content.metadata.description}
               image={asset.content.links.image}
               name={asset.content.metadata.name}
-              price={0}
               button={
                 <ListButton
                   nftMintAddress={asset.id}

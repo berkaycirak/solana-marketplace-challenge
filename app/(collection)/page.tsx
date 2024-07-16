@@ -11,7 +11,7 @@ import { useWallet } from "@solana/wallet-adapter-react";
 
 const CollectionPage = () => {
   const { connected } = useWallet();
-  console.log(connected);
+
   return (
     <section className="container mx-auto p-2 md:p-12">
       {/* Banner For MarketHall  */}

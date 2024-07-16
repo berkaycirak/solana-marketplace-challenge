@@ -17,6 +17,7 @@ import {
 import React, { ElementRef, useRef, useState } from "react";
 import { toast } from "sonner";
 import { Minus, Plus } from "lucide-react";
+import ListPriceInput from "./ListPriceInput";
 
 interface ListButtonProps {
   collectionAddress: string;
@@ -30,11 +31,14 @@ const ListButton = ({
   refetch,
 }: ListButtonProps) => {
   const { connection } = useConnection();
+  const [isInputActive, setIsInputActive] = useState(false);
   const program = useProgram();
   const { publicKey: signerPublicKey, sendTransaction } = useWallet();
+
   // List click logic
-  const handleList = async (e: any) => {
+  const handleList = async (e: MouseEvent, price: number) => {
     e.stopPropagation();
+    setIsInputActive(true);
     if (program && signerPublicKey) {
       // Take the promise then pass it to toaster for user feedback on UI
 
@@ -45,17 +49,17 @@ const ListButton = ({
           collectionMint: new PublicKey(collectionAddress),
           makerMint: new PublicKey(nftMintAddress),
           // TODO:get the price from user
-          price: 1.5,
+          price,
         });
 
         toast.promise(listPromise, {
-          loading: "Cancelling listing...",
+          loading: "Listing your NFT...",
           success: async (data) => {
             if (data) {
               const signature = await sendTransaction(data, connection);
               refetch();
               console.log(signature);
-              return "You have cancelled your listing!";
+              return "You have listed your NFT!";
             }
           },
           error: "An error occured",
@@ -66,13 +70,25 @@ const ListButton = ({
     }
   };
 
-  const listPriceRef = useRef<ElementRef<"input">>(null);
-  const [listPrice, setListPrice] = useState<number>(0);
-
   return (
-    <Button className="w-full" onClick={handleList}>
-      List
-    </Button>
+    <div
+      className="flex h-[50px] w-full items-center justify-center rounded-md bg-primary text-white"
+      onClick={(e) => {
+        e.stopPropagation();
+        setIsInputActive(true);
+      }}
+    >
+      {isInputActive ? (
+        <ListPriceInput
+          setListInput={setIsInputActive}
+          handleList={handleList}
+        />
+      ) : (
+        <span className="flex h-full w-full items-center justify-center transition hover:bg-primary-foreground/10">
+          List
+        </span>
+      )}
+    </div>
     // <Drawer>
     //   <DrawerTrigger asChild>
     //     <Button className="w-full">List</Button>

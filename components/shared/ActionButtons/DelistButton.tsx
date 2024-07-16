@@ -18,7 +18,8 @@ const DelistButton = ({ owner, ownerMint, refetch }: DelistButtonProps) => {
   const { publicKey: connectedKey, sendTransaction } = useWallet();
   const { connection } = useConnection();
   // Handle delist logic
-  const handleDelist = () => {
+  const handleDelist = (e: any) => {
+    e.stopPropagation();
     if (connectedKey && program) {
       try {
         const delistPromise = delist_nft({
