@@ -17,6 +17,7 @@ const useBalance = () => {
     }
   };
 
+  // TODO:watch the balance
   const { data, error, status } = useQuery({
     queryKey: ["wallet_balance_" + publicKey?.toBase58()],
     queryFn: fetchBalance,

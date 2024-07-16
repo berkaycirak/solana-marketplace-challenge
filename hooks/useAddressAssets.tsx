@@ -1,4 +1,3 @@
-import { createUmi } from "@metaplex-foundation/umi-bundle-defaults";
 import { publicKey } from "@metaplex-foundation/umi";
 import {
   fetchAllDigitalAssetByOwner,
@@ -36,13 +35,12 @@ const useAddressAssets = () => {
   const fetchAssets = async () => {
     if (connectedAddress) {
       // Fetch assets from on-chain
-
       try {
         const assets = await fetchAssetsOfAddress({
           address: connectedAddress.toBase58(),
         });
 
-        return assets;
+        return assets.filter((asset) => asset.grouping.length > 0);
       } catch (error) {
         console.log(error);
         toast.error("There is an error while fetching your NFTs");
@@ -53,7 +51,6 @@ const useAddressAssets = () => {
   const { data, status, refetch } = useQuery({
     queryFn: fetchAssets,
     queryKey: [`assets_${connectedAddress}`],
-    refetchInterval: 20 * 60 * 1000, //20sec
     enabled: !!connectedAddress,
   });
 
